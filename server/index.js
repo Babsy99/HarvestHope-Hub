@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/user'); // Import routes first
+const userRoutes = require('./routes/user'); // Ensure correct path
 const app = express();
 
 // Middleware

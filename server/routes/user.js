@@ -4,6 +4,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
+// Test route
+router.get('/test', (req, res) => {
+  res.send('Test route is working');
+});
+
 // Register route
 router.post('/register', async (req, res) => {
   try {
@@ -18,13 +23,23 @@ router.post('/register', async (req, res) => {
 // Login route
 router.post('/login', async (req, res) => {
   try {
+    console.log('Login request received:', req.body);
     const user = await User.findOne({ email: req.body.email });
-    if (!user || !await bcrypt.compare(req.body.password, user.password)) {
+    if (!user) {
+      console.log('User not found');
       return res.status(400).send({ error: 'Invalid credentials' });
     }
-    const token = jwt.sign({ _id: user._id }, 'secretkey');
+    console.log('User found:', user);
+    const isMatch = await bcrypt.compare(req.body.password, user.password);
+    if (!isMatch) {
+      console.log('Password does not match');
+      return res.status(400).send({ error: 'Invalid credentials' });
+    }
+    console.log('User authenticated:', user);
+    const token = jwt.sign({ _id: user._id }, 'secretkey', { expiresIn: '1h' });
     res.send({ user, token });
   } catch (error) {
+    console.log('Error during login:', error);
     res.status(400).send(error);
   }
 });
