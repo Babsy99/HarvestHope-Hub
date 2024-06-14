@@ -9,7 +9,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/users/login', { email, password });
+      const response = await axios.post('http://localhost:5000/api/users/login', { email, password });
       console.log('User logged in:', response.data);
       // Save the token to localStorage
       localStorage.setItem('token', response.data.token);
@@ -17,8 +17,12 @@ const Login = () => {
       // Redirect to profile or another page
       window.location.href = '/profile';
     } catch (error) {
-      setError('Invalid credentials');
-      console.error('Error logging in user:', error);
+      console.error('Error response:', error.response);
+      if (error.response && error.response.data && error.response.data.error) {
+        setError(error.response.data.error);
+      } else {
+        setError('An error occurred. Please try again.');
+      }
     }
   };
 

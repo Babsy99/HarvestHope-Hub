@@ -2,7 +2,7 @@ const express = require('express');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const router = express.Router();
+const router = express.Router(); // Initialize the router
 
 // Test route
 router.get('/test', (req, res) => {
@@ -16,7 +16,8 @@ router.post('/register', async (req, res) => {
     await user.save();
     res.status(201).send(user);
   } catch (error) {
-    res.status(400).send(error);
+    console.log('Error during registration:', error);
+    res.status(400).send({ error: 'Registration failed' });
   }
 });
 
@@ -40,7 +41,7 @@ router.post('/login', async (req, res) => {
     res.send({ user, token });
   } catch (error) {
     console.log('Error during login:', error);
-    res.status(400).send(error);
+    res.status(400).send({ error: 'An error occurred during login. Please try again.' });
   }
 });
 

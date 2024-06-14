@@ -1,11 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const userRoutes = require('./routes/user'); // Ensure correct path
+const cors = require('cors');
+const userRoutes = require('./routes/user'); // Import user routes
+
 const app = express();
 
 // Middleware
 app.use(bodyParser.json());
+app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/food_platform', {
@@ -18,7 +21,7 @@ mongoose.connect('mongodb://localhost:27017/food_platform', {
 // Use routes
 app.use('/api/users', userRoutes);
 
-// Simple route
+// Simple route for testing
 app.get('/', (req, res) => {
   res.send('Welcome to the Food Waste Reduction Platform API');
 });
